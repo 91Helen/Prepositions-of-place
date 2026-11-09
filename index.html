@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>Mia’s Town Adventure</title>
+        <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --ink: #2b2d5b;
+                --card: #fffdf6;
+                --pri: #ff7a3d;
+                --ok: #2fbf71;
+                --bad: #ef4d5e;
+                --s1: #3fb8ff;
+                --s2: #fff3c9;
+                --h1: #b8ee8c;
+                --h2: #84e06c;
+                --h3: #4fcf66;
+                box-sizing: border-box;
+                padding-top: env(safe-area-inset-top,0px);
+                padding-bottom: env(safe-area-inset-bottom,0px)
+            }
+
+            @media (prefers-color-scheme: dark) {
+                :root:not([data-theme="light"]) {
+                    --ink:#f4f4ff;
+                    --card: #2a2f5e;
+                    --s1: #1b2250;
+                    --s2: #3a3f86;
+                    --h1: #2d4a6b;
+                    --h2: #245a5a;
+                    --h3: #1d4d44
+                }
+            }
+
+            :root[data-theme="dark"] {
+                --ink: #f4f4ff;
+                --card: #2a2f5e;
+                --s1: #1b2250;
+                --s2: #3a3f86;
+                --h1: #2d4a6b;
+                --h2: #245a5a;
+                --h3: #1d4d44
+            }
+
+            html {
+                scroll-padding-top: env(safe-area-inset-top,0px)
+            }
+
+            * {
+                box-sizing: border-box
+            }
+
+            html,body {
+                min-height: 100%;
+                margin: 0
+            }
+
+            body {
+                font-family: Fredoka,system-ui,sans-serif;
+                color: var(--ink);
+                background: var(--s1);
+                overflow-x: hidden
+            }
+
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0 0 auto;
+                height: env(safe-area-inset-top,0px);
+                z-index: 10
+            }
+
+            #bg {
+                position: fixed;
+                inset: 0;
+                background: linear-gradient(var(--s1),var(--s2));
+                overflow: hidden
+            }
+
+            .ly {
+                position: absolute;
+                inset: -70px;
+                will-change: transform
+            }
+
+            .ly svg {
+                width: 100%;
+                height: 100%
+            }
+
+            .cl {
+                animation: dr 26s ease-in-out infinite alternate
+            }
+
+            @keyframes dr {
+                to {
+                    transform: translateX(90px)
+                }
+            }
+
+            .fl {
+                position: absolute;
+                font-size: 34px;
+                animation: fy 6s ease-in-out infinite alternate
+            }
+
+            @keyframes fy {
+                to {
+                    transform: translate(20px,-28px) rotate(8deg)
+                }
+            }
+
+            #app {
+                position: relative;
+                z-index: 2;
+                max-width: 980px;
+                margin: 0 auto;
+                padding: 12px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px
+            }
+
+            .top {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: wrap
+            }
+
+            .pill {
+                background: var(--card);
+                border-radius: 99px;
+                padding: 6px 16px;
+                font-weight: 700;
+                box-shadow: 0 4px 0 #0002
+            }
+
+            .card {
+                background: var(--card);
+                border-radius: 26px;
+                padding: 14px;
+                box-shadow: 0 8px 0 #0002,0 18px 30px #0002
+            }
+
+            .say {
+                display: flex;
+                align-items: flex-end;
+                gap: 12px
+            }
+
+            #mia {
+                width: 92px;
+                flex: none;
+                animation: bob 2.2s ease-in-out infinite
+            }
+
+            @keyframes bob {
+                50% {
+                    transform: translateY(-8px) rotate(2deg)
+                }
+            }
+
+            .blink {
+                animation: bl 4s infinite;
+                transform-box: fill-box;
+                transform-origin: center
+            }
+
+            @keyframes bl {
+                0%,94%,100% {
+                    transform: scaleY(1)
+                }
+
+                97% {
+                    transform: scaleY(.1)
+                }
+            }
+
+            #bub {
+                position: relative;
+                background: var(--card);
+                border-radius: 22px;
+                padding: 12px 18px;
+                font-size: clamp(18px,2.8vw,24px);
+                font-weight: 700;
+                flex: 1;
+                box-shadow: 0 5px 0 #0002;
+                cursor: pointer
+            }
+
+            #bub::before {
+                content: "";
+                position: absolute;
+                left: -12px;
+                bottom: 20px;
+                border: 10px solid transparent;
+                border-right-color: var(--card);
+                border-left: 0
+            }
+
+            b.pr {
+                color: var(--pri);
+                background: #ff7a3d26;
+                padding: 0 7px;
+                border-radius: 9px
+            }
+
+            .btn {
+                font: inherit;
+                font-weight: 700;
+                font-size: clamp(17px,2.5vw,22px);
+                border: 0;
+                border-radius: 18px;
+                padding: 12px 20px;
+                background: var(--pri);
+                color: #fff;
+                box-shadow: 0 5px 0 #b8501f;
+                cursor: pointer;
+                transition: transform .1s
+            }
+
+            .btn:active {
+                transform: translateY(4px);
+                box-shadow: 0 1px 0 #b8501f
+            }
+
+            .btn:focus-visible {
+                outline: 4px solid #6a5cff
+            }
+
+            .btn.alt {
+                background: #6a5cff;
+                box-shadow: 0 5px 0 #3f33b8
+            }
+
+            .btn.sel {
+                background: #6a5cff;
+                box-shadow: 0 5px 0 #3f33b8;
+                transform: translateY(-3px)
+            }
+
+            .btn.ok {
+                background: var(--ok);
+                box-shadow: 0 5px 0 #1b8a4e
+            }
+
+            .btn.no {
+                background: var(--bad);
+                box-shadow: 0 5px 0 #a02a38
+            }
+
+            .opts {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: center;
+                margin-top: 12px
+            }
+
+            .sc,.mini {
+                width: 100%;
+                display: block;
+                border-radius: 18px;
+                max-height: 56vh
+            }
+
+            .mini {
+                max-width: 430px;
+                margin: auto
+            }
+
+            .slot {
+                fill: #fff6;
+                stroke: #fff;
+                stroke-width: 3;
+                stroke-dasharray: 7 6;
+                cursor: pointer;
+                animation: pl 1.3s ease-in-out infinite;
+                transform-box: fill-box;
+                transform-origin: center
+            }
+
+            @keyframes pl {
+                50% {
+                    transform: scale(1.18);
+                    fill: #fffb
+                }
+            }
+
+            .lvls {
+                display: grid;
+                grid-template-columns: repeat(auto-fit,minmax(210px,1fr));
+                gap: 14px;
+                margin-top: 10px
+            }
+
+            .lv {
+                text-align: left;
+                font: inherit;
+                color: var(--ink);
+                background: var(--card);
+                border: 3px solid var(--pri);
+                border-radius: 22px;
+                padding: 14px;
+                cursor: pointer;
+                box-shadow: 0 6px 0 #ff7a3d66;
+                transition: transform .15s
+            }
+
+            .lv:hover {
+                transform: translateY(-4px) rotate(-1deg)
+            }
+
+            .lv i {
+                font-style: normal;
+                font-size: 42px;
+                display: block
+            }
+
+            .lv strong {
+                font-size: 22px
+            }
+
+            .sentence {
+                font-size: clamp(20px,3.4vw,30px);
+                font-weight: 700;
+                text-align: center;
+                line-height: 1.7
+            }
+
+            .sentence u {
+                text-decoration: none;
+                border-bottom: 4px dashed var(--pri);
+                padding: 0 6px;
+                color: var(--pri)
+            }
+
+            h1 {
+                margin: 0 0 6px;
+                font-size: clamp(28px,5vw,44px)
+            }
+
+            .dots {
+                display: flex;
+                gap: 6px
+            }
+
+            .dots i {
+                width: 14px;
+                height: 14px;
+                border-radius: 50%;
+                background: #0003
+            }
+
+            .dots i.on {
+                background: var(--pri)
+            }
+
+            @keyframes sp {
+                to {
+                    transform: rotate(360deg)
+                }
+            }
+
+            .dg {
+                cursor: grab;
+                touch-action: none
+            }
+
+            #sp {
+                padding: 10px 14px;
+                flex: none
+            }
+
+            @media (prefers-reduced-motion:reduce) {
+                * {
+                    animation: none!important
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div id="bg">
+            <div class="ly" data-d="6">
+                <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+                    <circle cx="830" cy="130" r="120" fill="#ffe06640"/>
+                    <g style="transform-origin:830px 130px;animation:sp 40s linear infinite" stroke="#ffd23f" stroke-width="10" stroke-linecap="round">
+                        <path d="M830 40V10"/>
+                        <path d="M830 40V10" transform="rotate(45 830 130)"/>
+                        <path d="M830 40V10" transform="rotate(90 830 130)"/>
+                        <path d="M830 40V10" transform="rotate(135 830 130)"/>
+                        <path d="M830 40V10" transform="rotate(180 830 130)"/>
+                        <path d="M830 40V10" transform="rotate(225 830 130)"/>
+                        <path d="M830 40V10" transform="rotate(270 830 130)"/>
+                        <path d="M830 40V10" transform="rotate(315 830 130)"/>
+                    </g>
+                    <circle cx="830" cy="130" r="70" fill="#ffe066"/>
+                    <circle cx="810" cy="120" r="6" fill="#2b2d5b"/>
+                    <circle cx="850" cy="120" r="6" fill="#2b2d5b"/>
+                    <path d="M804 142Q830 168 856 142" stroke="#2b2d5b" stroke-width="5" fill="none" stroke-linecap="round"/>
+                    <circle cx="792" cy="140" r="8" fill="#ff8fa3" opacity=".6"/>
+                    <circle cx="868" cy="140" r="8" fill="#ff8fa3" opacity=".6"/>
+                </svg>
+            </div>
+            <div class="ly" data-d="14">
+                <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+                    <g fill="none" stroke-width="16" opacity=".6">
+                        <path d="M60 470A320 320 0 0 1 700 470" stroke="#ff5f7a"/>
+                        <path d="M76 470A304 304 0 0 1 684 470" stroke="#ffa94d"/>
+                        <path d="M92 470A288 288 0 0 1 668 470" stroke="#ffe066"/>
+                        <path d="M108 470A272 272 0 0 1 652 470" stroke="#7ee07e"/>
+                        <path d="M124 470A256 256 0 0 1 636 470" stroke="#5cc8ff"/>
+                        <path d="M140 470A240 240 0 0 1 620 470" stroke="#8b7bff"/>
+                    </g>
+                    <g class="cl" fill="#fff" opacity=".93">
+                        <ellipse cx="190" cy="120" rx="75" ry="28"/>
+                        <ellipse cx="245" cy="100" rx="48" ry="32"/>
+                        <ellipse cx="140" cy="108" rx="40" ry="24"/>
+                        <ellipse cx="620" cy="210" rx="85" ry="30"/>
+                        <ellipse cx="680" cy="188" rx="52" ry="34"/>
+                    </g>
+                </svg>
+            </div>
+            <div class="ly" data-d="22">
+                <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMax slice">
+                    <path style="fill:var(--h1)" d="M0 420Q200 330 420 410T800 400T1000 370V600H0Z"/>
+                </svg>
+            </div>
+            <div class="ly" data-d="30">
+                <span class="fl" style="left:14%;top:30%">🎈</span>
+                <span class="fl" style="left:70%;top:22%;animation-delay:-2s">🦋</span>
+                <span class="fl" style="left:44%;top:12%;animation-delay:-4s">🕊️</span>
+                <span class="fl" style="left:28%;top:62%;animation-delay:-1s">🐝</span>
+                <span class="fl" style="left:84%;top:55%;animation-delay:-3s">🐞</span>
+                <span class="fl" style="left:6%;top:8%;animation-delay:-5s">🎈</span>
+            </div>
+            <div class="ly" data-d="40">
+                <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMax slice">
+                    <path style="fill:var(--h2)" d="M0 480Q250 400 500 470T1000 450V600H0Z"/>
+                    <g fill="#2fbf5b">
+                        <circle cx="110" cy="438" r="38"/>
+                        <circle cx="150" cy="452" r="28"/>
+                    </g>
+                    <circle cx="880" cy="428" r="42" fill="#3ccf6a"/>
+                    <g fill="#ff5f7a">
+                        <circle cx="100" cy="430" r="5"/>
+                        <circle cx="125" cy="446" r="5"/>
+                        <circle cx="870" cy="420" r="5"/>
+                        <circle cx="895" cy="438" r="5"/>
+                    </g>
+                    <g fill="#8a5a3c">
+                        <rect x="105" y="460" width="10" height="26"/>
+                        <rect x="875" y="455" width="10" height="30"/>
+                    </g>
+                    <rect x="660" y="446" width="60" height="40" fill="#fff3c9"/>
+                    <path d="M652 448L690 418L728 448Z" fill="#ef4d5e"/>
+                    <rect x="680" y="462" width="16" height="24" fill="#8a5a3c"/>
+                </svg>
+            </div>
+            <div class="ly" data-d="62">
+                <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMax slice">
+                    <path style="fill:var(--h3)" d="M0 545Q300 495 600 545T1000 525V600H0Z"/>
+                    <g>
+                        <circle cx="90" cy="566" r="8" fill="#ff5f7a"/>
+                        <circle cx="200" cy="560" r="8" fill="#ff5f7a"/>
+                        <circle cx="310" cy="574" r="8" fill="#8b7bff"/>
+                        <circle cx="420" cy="572" r="8" fill="#ffd23f"/>
+                        <circle cx="530" cy="566" r="8" fill="#fff"/>
+                        <circle cx="640" cy="560" r="8" fill="#ff8fa3"/>
+                        <circle cx="760" cy="565" r="8" fill="#ffd23f"/>
+                        <circle cx="880" cy="560" r="8" fill="#8b7bff"/>
+                        <g fill="#ffd23f">
+                            <circle cx="90" cy="566" r="3"/>
+                            <circle cx="200" cy="560" r="3"/>
+                            <circle cx="640" cy="560" r="3"/>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div id="app">
+            <div class="top">
+                <button class="pill" id="mn" style="border:0;font:inherit;color:inherit;cursor:pointer">☰ Levels</button>
+                <span class="pill" id="lt">🏙️ Mia’s Town Adventure</span>
+                <span class="dots" id="dots"></span>
+                <span class="pill" id="hud">⭐ 0</span>
+            </div>
+            <div class="say">
+                <svg id="mia" viewBox="0 0 120 130" aria-hidden="true">
+                    <path d="M92 104c28-2 30-42 8-46" fill="none" stroke="#ff9b3d" stroke-width="12" stroke-linecap="round"/>
+                    <ellipse cx="60" cy="102" rx="32" ry="26" fill="#ffa94d"/>
+                    <ellipse cx="60" cy="110" rx="18" ry="15" fill="#ffe3b8"/>
+                    <path d="M26 38L31 12L50 28ZM94 38L89 12L70 28Z" fill="#ff9b3d" stroke="#ff9b3d" stroke-width="6" stroke-linejoin="round"/>
+                    <path d="M33 30L35 20L43 28ZM87 30L85 20L77 28Z" fill="#ff8fa3"/>
+                    <circle cx="60" cy="54" r="38" fill="#ffa94d"/>
+                    <g class="blink">
+                        <ellipse cx="45" cy="52" rx="6" ry="8" fill="#2b2d5b"/>
+                        <ellipse cx="75" cy="52" rx="6" ry="8" fill="#2b2d5b"/>
+                        <circle cx="47" cy="49" r="2.5" fill="#fff"/>
+                        <circle cx="77" cy="49" r="2.5" fill="#fff"/>
+                    </g>
+                    <circle cx="34" cy="66" r="6" fill="#ff8fa3" opacity=".6"/>
+                    <circle cx="86" cy="66" r="6" fill="#ff8fa3" opacity=".6"/>
+                    <ellipse cx="60" cy="63" rx="5" ry="3.5" fill="#ff5f7a"/>
+                    <path d="M60 67q-8 10-16 2M60 67q8 10 16 2M20 58l16 3M20 70l16-3M100 58l-16 3M100 70l-16-3" stroke="#2b2d5b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+                </svg>
+                <div id="bub"></div>
+                <button class="btn alt" id="sp" aria-label="Listen" title="Listen">🔊</button>
+            </div>
+            <div class="card" id="st"></div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.6.0/confetti.browser.min.js"></script>
+        <script>
+            const $ = s => document.querySelector(s)
+              , R = a => a[Math.random() * a.length | 0]
+              , sh = a => [...a].sort( () => Math.random() - .5)
+              , NS = 'http://www.w3.org/2000/svg';
+            const G = window.gsap || {
+                set: (g, o) => g.setAttribute('transform', `translate(${o.x},${o.y})`),
+                from() {},
+                to() {}
+            };
+            const boom = (n=110) => window.confetti && confetti({
+                particleCount: n,
+                spread: 85,
+                origin: {
+                    y: .7
+                }
+            });
+            let AC;
+            function tone(f, d=.16, t='sine', v=.14, w=0) {
+                try {
+                    AC = AC || new AudioContext();
+                    const o = AC.createOscillator()
+                      , g = AC.createGain();
+                    o.type = t;
+                    o.frequency.value = f;
+                    o.connect(g);
+                    g.connect(AC.destination);
+                    const s = AC.currentTime + w;
+                    g.gain.setValueAtTime(v, s);
+                    g.gain.exponentialRampToValueAtTime(.001, s + d);
+                    o.start(s);
+                    o.stop(s + d)
+                } catch (e) {}
+            }
+            const good = () => [523, 659, 784, 1047].forEach( (f, i) => tone(f, .2, 'triangle', .15, i * .09))
+              , bad = () => tone(200, .3, 'sawtooth', .09);
+            function say(t) {
+                try {
+                    speechSynthesis.cancel();
+                    const u = new SpeechSynthesisUtterance(t);
+                    u.lang = 'en-GB';
+                    u.rate = .85;
+                    u.pitch = 1.15;
+                    speechSynthesis.speak(u)
+                } catch (e) {}
+            }
+            function tell(h) {
+                $('#bub').innerHTML = h
+            }
+            $('#bub').onclick = $('#sp').onclick = () => say($('#bub').textContent.replace(/\+\d+$/, ''));
+            /* parallax */
+            const L = [...document.querySelectorAll('.ly')];
+            let tx = 0
+              , ty = 0
+              , cx = 0
+              , cy = 0;
+            addEventListener('pointermove', e => {
+                tx = e.clientX / innerWidth - .5;
+                ty = e.clientY / innerHeight - .5
+            }
+            );
+            addEventListener('deviceorientation', e => {
+                if (e.gamma != null) {
+                    tx = Math.max(-.5, Math.min(.5, e.gamma / 50));
+                    ty = Math.max(-.5, Math.min(.5, (e.beta - 45) / 80))
+                }
+            }
+            );
+            (function f() {
+                cx += (tx - cx) * .06;
+                cy += (ty - cy) * .06;
+                L.forEach(l => {
+                    const d = +l.dataset.d;
+                    l.style.transform = `translate(${(-cx * d * 2).toFixed(1)}px,${(-cy * d).toFixed(1)}px)`
+                }
+                );
+                requestAnimationFrame(f)
+            }
+            )();
+            /* data */
+            const RELS = ['behind', 'next to', 'in front of', 'between']
+              , NM = ['school', 'café', 'cinema']
+              , COL = {
+                school: '#e5533d',
+                café: '#ffc233',
+                cinema: '#4c8dff'
+            };
+            const ITEMS = [['car', '🚗'], ['dog', '🐶'], ['ball', '⚽'], ['balloon', '🎈'], ['bike', '🚲'], ['cat', '🐱'], ['kite', '🪁'], ['robot', '🤖']];
+            const LV = [['🌳', 'Tree Detective', 'Look and choose the word'], ['🚗', 'Mia’s Missions', 'Listen and put things in place'], ['🔍', 'True or Tricky?', 'Find the true sentence'], ['🎤', 'Town Reporter', 'Build and say sentences']]
+              , N = [6, 6, 5, 4];
+            let lv = 0
+              , qi = 0
+              , pts = 0
+              , miss = 0
+              , lp = 0
+              , lm = 0
+              , tries = 0
+              , order = []
+              , Q = []
+              , S = {}
+              , busy = 0;
+            const best = [null, null, null, null];
+            const C = [215, 450, 685]
+              , GX = [65, 332, 567, 835];
+            function hud() {
+                $('#hud').textContent = `🏅 ${pts}   ❌ ${miss}`;
+                $('#dots').innerHTML = lv >= 0 && N[lv] ? [...Array(N[lv])].map( (_, i) => `<i class="${i < qi ? 'on' : ''}"></i>`).join('') : ''
+            }
+            /* scene */
+            function bld(n, x) {
+                const c = COL[n];
+                return `<g transform="translate(${x - 85},0)"><rect y="160" width="170" height="170" rx="8" fill="${c}"/><path d="M-8 166L85 108L178 166Z" fill="#7a4a62"/><rect x="35" y="174" width="100" height="26" rx="7" fill="#fff"/><text x="85" y="193" text-anchor="middle" font-size="17" font-weight="700" fill="#2b2d5b">${n}</text>${[20, 70, 120].map(a => `<rect x="${a}" y="212" width="30" height="34" rx="5" fill="#fff" opacity=".9"/>`).join('')}<rect x="65" y="262" width="40" height="68" rx="6" fill="#2b2d5b" opacity=".75"/>${n == 'café' ? '<path d="M10 205h150l-12 14H22Z" fill="#fff" opacity=".0"/>' : ''}</g>`
+            }
+            function scene(clk) {
+                order = sh(NM);
+                S = {};
+                C.forEach( (x, i) => {
+                    S['f' + i] = {
+                        x,
+                        y: 395,
+                        l: 'f'
+                    };
+                    S['b' + i] = {
+                        x: x + 48,
+                        y: 118,
+                        l: 'b'
+                    }
+                }
+                );
+                GX.forEach( (x, i) => S['g' + i] = {
+                    x,
+                    y: 298,
+                    l: 'f'
+                });
+                $('#st').innerHTML = `<svg id="sv" class="sc" viewBox="0 0 900 470"><rect width="900" height="200" fill="#bfeaff"/><rect y="170" width="900" height="170" fill="#9be28f"/><rect y="330" width="900" height="36" fill="#efe3c8"/><rect y="366" width="900" height="104" fill="#5b6285"/><path d="M0 418H900" stroke="#fff" stroke-width="6" stroke-dasharray="40 30"/><text x="40" y="330" font-size="30">🌷</text><text x="850" y="335" font-size="30">🌼</text><g id="lb"></g>${order.map( (n, i) => bld(n, C[i])).join('')}<g id="lf"></g><g id="ls"></g><g id="ld"></g></svg>`;
+                if (clk)
+                    Object.keys(S).forEach(id => {
+                        const s = S[id]
+                          , c = document.createElementNS(NS, 'circle');
+                        c.setAttribute('class', 'slot');
+                        c.setAttribute('cx', s.x);
+                        c.setAttribute('cy', s.y);
+                        c.setAttribute('r', 31);
+                        if (clk === 1)
+                            c.style.pointerEvents = 'none';
+                        else
+                            c.onclick = () => clk(id);
+                        $('#ls').appendChild(c)
+                    }
+                    )
+            }
+            function put(e, id, a) {
+                const s = S[id]
+                  , g = document.createElementNS(NS, 'g');
+                g.innerHTML = `<text font-size="52" text-anchor="middle">${e}</text>`;
+                $('#l' + s.l).appendChild(g);
+                G.set(g, {
+                    x: s.x,
+                    y: s.y + 22
+                });
+                if (a)
+                    G.from(g, {
+                        y: -160,
+                        scale: 0,
+                        duration: .8,
+                        ease: 'bounce.out',
+                        transformOrigin: '50% 50%'
+                    });
+                return g
+            }
+            const pos = n => order.indexOf(n);
+            function ok(id, rel, a, b) {
+                const t = id[0]
+                  , i = +id[1]
+                  , p = pos(a);
+                if (rel == 'in front of')
+                    return t == 'f' && i == p;
+                if (rel == 'behind')
+                    return t == 'b' && i == p;
+                if (rel == 'next to')
+                    return t == 'g' && (i == p || i == p + 1);
+                if (rel == 'between') {
+                    const q = pos(b);
+                    return t == 'g' && Math.abs(p - q) == 1 && i == Math.max(p, q)
+                }
+                return false
+            }
+            function desc(id) {
+                const t = id[0]
+                  , i = +id[1];
+                return t == 'f' ? `in front of the ${order[i]}` : t == 'b' ? `behind the ${order[i]}` : i == 0 ? `next to the ${order[0]}` : i == 3 ? `next to the ${order[2]}` : `between the ${order[i - 1]} and the ${order[i]}`
+            }
+            const phrase = (r, a, b) => `${r} the ${a}${r == 'between' ? ` and the ${b}` : ''}`;
+            function cands() {
+                const o = [];
+                NM.forEach(a => {
+                    ['behind', 'next to', 'in front of'].forEach(r => o.push([r, a]));
+                }
+                );
+                o.push(['between', order[0], order[1]], ['between', order[1], order[2]]);
+                return o
+            }
+            /* flow */
+            function home() {
+                try {
+                    speechSynthesis.cancel()
+                } catch (e) {}
+                lv = -1;
+                qi = 0;
+                hud();
+                $('#lt').textContent = '🏙️ Mia’s Town Adventure';
+                tell('Hi! I’m <b class="pr">Mia</b>! Help me explore the town. Pick a level!', 'Hi! I am Mia! Help me explore the town. Pick a level!');
+                $('#st').innerHTML = `<h1>Where is it?</h1><div class="sentence" style="text-align:left;font-size:20px">Words to learn: <b class="pr">behind</b> <b class="pr">next to</b> <b class="pr">in front of</b> <b class="pr">between</b></div><div class="lvls">${LV.map( (l, i) => `<button class="lv" data-i="${i}"><i>${l[0]}</i><strong>Level ${i + 1}: ${l[1]}</strong><br>${l[2]}</button>`).join('')}</div>`;
+                document.querySelectorAll('.lv').forEach(b => b.onclick = () => start(+b.dataset.i))
+            }
+            function start(n) {
+                lv = n;
+                qi = 0;
+                lp = 0;
+                lm = 0;
+                Q = sh([...RELS, ...sh(RELS).slice(0, 2)]);
+                $('#lt').textContent = `Level ${n + 1}: ${LV[n][1]}`;
+                nxt()
+            }
+            function nxt() {
+                try {
+                    speechSynthesis.cancel()
+                } catch (e) {}
+                busy = 0;
+                tries = 0;
+                hud();
+                if (qi >= N[lv])
+                    return fin();
+                [L1, L2, L3, L4][lv]()
+            }
+            function right(s) {
+                good();
+                boom(70);
+                const p = tries == 0 ? 10 : tries == 1 ? 5 : 2;
+                pts += p;
+                lp += p;
+                qi++;
+                hud();
+                tell(s + ` <span style="color:var(--ok)">+${p}</span>`);
+                const d = document.createElement('div');
+                d.className = 'opts';
+                d.innerHTML = `<button class="btn" id="nx">${qi >= N[lv] ? 'Finish 🏁' : 'Next ▶'}</button>`;
+                $('#st').appendChild(d);
+                $('#nx').onclick = nxt
+            }
+            function wrong(m) {
+                bad();
+                tries++;
+                miss++;
+                lm++;
+                hud();
+                tell(m)
+            }
+            function fin() {
+                boom(220);
+                good();
+                best[lv] = Math.max(best[lv] || 0, lp);
+                const r = Math.min(1, lp / (N[lv] * 10))
+                  , k = r >= .9 ? 5 : r >= .75 ? 4 : r >= .55 ? 3 : r >= .35 ? 2 : 1
+                  , ti = ['Explorer', 'Helper', 'Town Star', 'Super Star', 'Town Champion'][k - 1]
+                  , ic = ['🎖️', '🥉', '🥈', '🥇', '🏆'][k - 1]
+                  , bar = n => '⭐'.repeat(n) + '☆'.repeat(5 - n);
+                let g = '';
+                if (best.every(x => x != null)) {
+                    const t = best.reduce( (a, b) => a + b, 0) / (N.reduce( (a, b) => a + b, 0) * 10)
+                      , k2 = t >= .9 ? 5 : t >= .75 ? 4 : t >= .55 ? 3 : t >= .35 ? 2 : 1;
+                    g = `<div class="sentence" style="margin-top:10px">🏆 All levels done! Grand award: ${bar(k2)}</div>`
+                }
+                tell(`${ti}! ${lp} points, ${lm} mistakes.`);
+                $('#st').innerHTML = `<div style="text-align:center"><div style="font-size:76px">${ic}</div><h1>${bar(k)}</h1><div class="sentence">${ti}<br>🏅 ${lp} / ${N[lv] * 10} points | ❌ ${lm} mistakes</div>${g}<div class="opts">${lv < 3 ? '<button class="btn" id="n">Next level ▶</button>' : ''}<button class="btn alt" id="r">Play again</button><button class="btn alt" id="m">Levels</button></div></div>`;
+                if ($('#n'))
+                    $('#n').onclick = () => start(lv + 1);
+                $('#r').onclick = () => start(lv);
+                $('#m').onclick = home
+            }
+            function fin0() {
+                const last = lv == 3;
+                tell(last ? 'You are a Town Master! Great job!' : 'Level complete! Well done!', last ? 'You are a Town Master! Great job!' : 'Level complete! Well done!');
+                $('#st').innerHTML = `<div style="text-align:center"><div style="font-size:70px">${last ? '🏆' : '🎉'}</div><h1>${'⭐'.repeat(Math.max(1, Math.min(5, sc)))}</h1><div class="opts">${lv < 3 ? '<button class="btn" id="n">Next level ▶</button>' : ''}<button class="btn alt" id="r">Play again</button><button class="btn alt" id="m">Menu</button></div></div>`;
+                if ($('#n'))
+                    $('#n').onclick = () => start(lv + 1);
+                $('#r').onclick = () => start(lv);
+                $('#m').onclick = home
+            }
+            /* L1 */
+            const mb = (x, w, c='#ffc233') => `<rect x="${x}" y="100" width="${w}" height="80" rx="6" fill="${c}"/><path d="M${x - 6} 104L${x + w / 2} 68L${x + w + 6} 104Z" fill="#7a4a62"/><rect x="${x + w / 2 - 9}" y="140" width="18" height="40" rx="4" fill="#2b2d5b" opacity=".7"/><rect x="${x + 10}" y="116" width="20" height="20" rx="4" fill="#fff"/><rect x="${x + w - 30}" y="116" width="20" height="20" rx="4" fill="#fff"/>`;
+            const tr = (x, y, s=100) => `<text x="${x}" y="${y}" font-size="${s}" text-anchor="middle">🌳</text>`;
+            function mini(r) {
+                return `<rect width="300" height="190" fill="#bfeaff"/><rect y="160" width="300" height="30" fill="#9be28f"/>` + ({
+                    behind: tr(150, 122) + mb(95, 110),
+                    'next to': mb(40, 100, '#4c8dff') + tr(225, 178),
+                    'in front of': mb(95, 110, '#e5533d') + tr(150, 186, 110),
+                    between: mb(10, 90, '#e5533d') + mb(200, 90, '#4c8dff') + tr(150, 178)
+                })[r]
+            }
+            function L1() {
+                const r = Q[qi];
+                $('#st').innerHTML = `<svg class="mini" viewBox="0 0 300 190">${mini(r)}</svg><div class="opts" id="o"></div>`;
+                tell('Where is the <b class="pr">tree</b>?', 'Where is the tree?');
+                sh(RELS).forEach(x => {
+                    const b = document.createElement('button');
+                    b.className = 'btn alt';
+                    b.textContent = x;
+                    b.onclick = () => {
+                        if (busy)
+                            return;
+                        if (x == r) {
+                            busy = 1;
+                            b.className = 'btn ok';
+                            right(`The tree is <b class="pr">${r}</b> the ${r == 'between' ? 'two buildings' : 'building'}.`)
+                        } else {
+                            b.className = 'btn no';
+                            wrong('Oops! Look again and try another word.')
+                        }
+                    }
+                    ;
+                    $('#o').appendChild(b)
+                }
+                )
+            }
+            /* L2 */
+            function L2() {
+                scene(1);
+                const r = Q[qi]
+                  , it = R(ITEMS);
+                let a = R(order)
+                  , b = null;
+                if (r == 'between') {
+                    const p = R([0, 1]);
+                    a = order[p];
+                    b = order[p + 1]
+                }
+                const t = `Put the ${it[0]} ${phrase(r, a, b)}.`;
+                tell(`Put the ${it[1]} <b class="pr">${r}</b> the ${a}${b ? ` and the ${b}` : ''}.`, t);
+                const sv = $('#sv');
+                sv.style.touchAction = 'none';
+                const pt = e => {
+                    const p = sv.createSVGPoint();
+                    p.x = e.clientX;
+                    p.y = e.clientY;
+                    return p.matrixTransform(sv.getScreenCTM().inverse())
+                }
+                ;
+                const g = document.createElementNS(NS, 'g');
+                g.setAttribute('class', 'dg');
+                g.innerHTML = `<text font-size="58" text-anchor="middle" dominant-baseline="central">${it[1]}</text>`;
+                $('#ld').innerHTML = '<circle cx="70" cy="62" r="52" fill="#fff" opacity=".8"/><text x="70" y="128" font-size="15" font-weight="700" text-anchor="middle" fill="#2b2d5b">drag me!</text>';
+                $('#ld').appendChild(g);
+                G.set(g, {
+                    x: 70,
+                    y: 62
+                });
+                let dr = 0;
+                g.onpointerdown = e => {
+                    if (busy)
+                        return;
+                    dr = 1;
+                    g.setPointerCapture(e.pointerId);
+                    e.preventDefault()
+                }
+                ;
+                g.onpointermove = e => {
+                    if (dr) {
+                        const p = pt(e);
+                        G.set(g, {
+                            x: p.x,
+                            y: p.y
+                        })
+                    }
+                }
+                ;
+                g.onpointerup = e => {
+                    if (!dr)
+                        return;
+                    dr = 0;
+                    const p = pt(e);
+                    let id = null
+                      , d = 75;
+                    Object.keys(S).forEach(k => {
+                        const q = Math.hypot(S[k].x - p.x, S[k].y - p.y);
+                        if (q < d) {
+                            d = q;
+                            id = k
+                        }
+                    }
+                    );
+                    if (!id) {
+                        G.set(g, {
+                            x: 70,
+                            y: 62
+                        });
+                        return
+                    }
+                    busy = 1;
+                    g.remove();
+                    const pg = put(it[1], id, 0);
+                    if (ok(id, r, a, b))
+                        right(`Yes! The ${it[0]} is <b class="pr">${r}</b> the ${a}${b ? ` and the ${b}` : ''}!`);
+                    else {
+                        wrong(`Oops! The ${it[0]} is ${desc(id)}. Try again!`);
+                        setTimeout( () => {
+                            pg.remove();
+                            $('#ld').appendChild(g);
+                            G.set(g, {
+                                x: 70,
+                                y: 62
+                            });
+                            busy = 0
+                        }
+                        , 1300)
+                    }
+                }
+            }
+            /* L3 */
+            function L3() {
+                scene();
+                const its = sh(ITEMS).slice(0, 2)
+                  , ids = sh(Object.keys(S)).slice(0, 2);
+                its.forEach( (x, i) => put(x[1], ids[i], 1));
+                const it = its[0]
+                  , id = ids[0];
+                const all = cands()
+                  , tr_ = all.filter(c => ok(id, ...c))
+                  , fl = all.filter(c => !ok(id, ...c))
+                  , pick = [R(tr_), ...sh(fl).slice(0, 2)];
+                tell(`Where is the ${it[1]}? Find the true sentence.`, `Where is the ${it[0]}?`);
+                const o = document.createElement('div');
+                o.className = 'opts';
+                o.style.flexDirection = 'column';
+                o.style.alignItems = 'stretch';
+                $('#st').appendChild(o);
+                sh(pick).forEach(c => {
+                    const b = document.createElement('button')
+                      , s = `The ${it[0]} is ${phrase(...c)}.`;
+                    b.className = 'btn alt';
+                    b.textContent = s;
+                    b.onclick = () => {
+                        if (busy)
+                            return;
+                        if (pick.indexOf(c) == 0) {
+                            busy = 1;
+                            b.className = 'btn ok';
+                            right(`Yes! ${s.replace(/(behind|next to|in front of|between)/, '<b class="pr">$1</b>')}`)
+                        } else {
+                            b.className = 'btn no';
+                            wrong('Tricky! Check the picture again.')
+                        }
+                    }
+                    ;
+                    o.appendChild(b)
+                }
+                )
+            }
+            /* L4 */
+            function L4() {
+                scene();
+                const it = R(ITEMS)
+                  , id = R(Object.keys(S));
+                put(it[1], id, 1);
+                let rel = null
+                  , bs = []
+                  , done = 0;
+                $('#st').insertAdjacentHTML('beforeend', '<div class="sentence" id="se"></div><div class="opts" id="pr"></div><div class="opts" id="bd"></div><div class="opts" id="ac"><button class="btn" id="ck">Check ✔</button></div>');
+                tell(`Look! Where is the ${it[1]}? Build the sentence.`, `Where is the ${it[0]}?`);
+                const draw = () => {
+                    $('#se').innerHTML = `The ${it[0]} is <u>${rel || '&nbsp;&nbsp;&nbsp;&nbsp;'}</u> the <u>${bs[0] || '&nbsp;&nbsp;&nbsp;&nbsp;'}</u>${rel == 'between' ? ` and the <u>${bs[1] || '&nbsp;&nbsp;&nbsp;&nbsp;'}</u>` : ''}.`;
+                    document.querySelectorAll('#pr .btn').forEach(b => b.classList.toggle('sel', b.textContent == rel));
+                    document.querySelectorAll('#bd .btn').forEach(b => b.classList.toggle('sel', bs.includes(b.textContent)))
+                }
+                ;
+                RELS.forEach(x => {
+                    const b = document.createElement('button');
+                    b.className = 'btn alt';
+                    b.textContent = x;
+                    b.onclick = () => {
+                        rel = x;
+                        bs = bs.slice(-(x == 'between' ? 2 : 1));
+                        draw()
+                    }
+                    ;
+                    $('#pr').appendChild(b)
+                }
+                );
+                NM.forEach(x => {
+                    const b = document.createElement('button');
+                    b.className = 'btn alt';
+                    b.textContent = x;
+                    b.onclick = () => {
+                        bs = bs.includes(x) ? bs.filter(y => y != x) : [...bs, x].slice(-(rel == 'between' ? 2 : 1));
+                        draw()
+                    }
+                    ;
+                    $('#bd').appendChild(b)
+                }
+                );
+                draw();
+                $('#ck').onclick = () => {
+                    if (done)
+                        return;
+                    const need = rel == 'between' ? 2 : 1;
+                    if (!rel || bs.length < need)
+                        return tell('Choose the words first!');
+                    if (ok(id, rel, bs[0], bs[1])) {
+                        done = 1;
+                        const s = `The ${it[0]} is ${phrase(rel, bs[0], bs[1])}.`;
+                        right(`Perfect! ${s}`);
+                        $('#ac').innerHTML = '';
+                        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+                        if (SR) {
+                            const m = document.createElement('button');
+                            m.className = 'btn alt';
+                            m.textContent = '🎤 Say it out loud!';
+                            m.onclick = () => {
+                                const r = new SR();
+                                r.lang = 'en-GB';
+                                m.textContent = '🎧 Listening…';
+                                r.onresult = e => {
+                                    const t = e.results[0][0].transcript.toLowerCase();
+                                    if (rel.split(' ').every(w => t.includes(w))) {
+                                        pts += 5;
+                                        lp += 5;
+                                        hud();
+                                        boom(80);
+                                        good();
+                                        m.textContent = '⭐ Great speaking!'
+                                    } else {
+                                        m.textContent = 'Good try! 🙂'
+                                    }
+                                }
+                                ;
+                                r.onerror = r.onend = () => {
+                                    if (/Listening/.test(m.textContent))
+                                        m.textContent = '🎤 Try again'
+                                }
+                                ;
+                                r.start()
+                            }
+                            ;
+                            $('#ac').appendChild(m)
+                        }
+                    } else {
+                        wrong(`Not quite. Look at the ${it[0]} again!`)
+                    }
+                }
+            }
+            $('#mn').onclick = home;
+            home();
+        </script>
+    </body>
+</html>
